@@ -1,0 +1,11 @@
+.idea
+**/node_modules/
+
+**/coverage
+**/build
+**/templates
+**/static
+
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
