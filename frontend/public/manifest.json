@@ -1,0 +1,19 @@
+{
+  "short_name": "LightWare",
+  "name": "Turn it on!",
+  "icons": [
+    {
+      "src": "lightware.png",
+      "sizes": "144x144 64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "related_applications": [{
+    "platform": "web",
+    "url": "http://localhost:3000/"
+  }],
+  "theme_color": "#000000",
+  "background_color": "#000000"
+}
