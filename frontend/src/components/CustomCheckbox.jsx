@@ -9,7 +9,7 @@ class CustomCheckbox extends Component {
     this.state = {
       checked: false
     };
-      this.ApiAddress = "http://192.168.1.109:5000/api/";
+      this.ApiAddress = "http://192.168.1.110:5000/api/";
   }
 
   componentDidMount() {
