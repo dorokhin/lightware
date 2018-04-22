@@ -21,7 +21,7 @@ $./dimmer.py channel_num dimming_value
 """
 import argparse
 import logging
-logging.basicConfig(filename='/run/dimmer.log', level=logging.WARNING, format='%(asctime)s %(message)s', datefmt='%d.%m.%Y %H:%M:%S ')
+logging.basicConfig(filename='/run/dimmer.log', level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%d.%m.%Y %H:%M:%S ')
 
 try:
     import smbus
