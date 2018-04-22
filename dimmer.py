@@ -19,12 +19,24 @@ $chmod +x ./dimmer.py
 $./dimmer.py channel_num dimming_value
 
 """
-import smbus
 import argparse
+import logging
+logging.basicConfig(filename='/run/dimmer.log', level=logging.WARNING, format='%(asctime)s %(message)s', datefmt='%d.%m.%Y %H:%M:%S ')
+
+try:
+    import smbus
+except ImportError as e:
+    logging.warning('Error: ' + str(e))
 
 
 class KridaDimmer:
-    bus = smbus.SMBus(3)
+    try:
+        bus = smbus.SMBus(3)
+    except IOError as e:
+        logging.warning('Error: ' + str(e))
+    except NameError as e:
+        logging.warning('Error: ' + str(e))
+
     """
     Send one byte of data to the i2c dimmer.
     :param address: hex value of i2c address (replace with your dimmer address)
@@ -51,12 +63,13 @@ class KridaDimmer:
         self.bus.write_byte(self._ADDRESS, self._CHANNEL_ADDR)
         self.bus.write_byte(self._ADDRESS, self._LEVEL)
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("channel", help="channel num", type=int)
     parser.add_argument("value", help="dimming value", type=int)
     args = parser.parse_args()
-    print(args.channel, args.value)
+    logging.info('Set channel {0} to value {1}'.format(args.channel, args.value))
 
     dim = KridaDimmer(channel_number=args.channel, level=args.value)
     dim.write_byte()

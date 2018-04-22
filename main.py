@@ -1,16 +1,16 @@
 import os
 import subprocess
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, jsonify, request, make_response, render_template
 
 application = Flask(__name__)
 application.debug = True
-CORS(application)
+cors = CORS(application, resources={r"/api/*": {"origins": "*"}})
 application.config['SECRET_KEY'] = 'j1h9syenwksu2nHanzPakq63sdfhshdfHjH45dfGFDjd'
 toolbar = DebugToolbarExtension(application)
 
-_version = '0.1.0'
+_version = '1.0.0'
 
 LIGHTWARE_BASE_PATH = '/sys/class/gpio'
 
@@ -34,20 +34,16 @@ class LightWare:
         self._read_only = read_only
         if not self._read_only:
             if not self._check_pin_export():
-                print('pin not exported')
                 with open(LIGHTWARE_EXPORT_PATH, 'w') as _f_ex:
-                    print('trying to export...')
                     _f_ex.write('{0}'.format(self._number))
 
             with open(self._lightware_gpio_direction_path(), 'w') as f:
-                print('write direction')
                 f.write(direction)
                 f.close()
         try:
             self._f_value = open(self._lightware_gpio_value_path(), 'r+')
         except FileNotFoundError:
             self._f_value = 0
-        print('GPIO value path')
 
     def _lightware_gpio_direction_path(self):
         return LIGHTWARE_GPIO_DIRECTION_PATH.format(self._number)
@@ -63,13 +59,11 @@ class LightWare:
         self._f_value.write(LIGHTWARE_GPIO_VALUE_HIGH)
         self._f_value.seek(0)
         self._f_value.close()
-        print('on')
 
     def off(self):
         self._f_value.write(LIGHTWARE_GPIO_VALUE_LOW)
         self._f_value.seek(0)
         self._f_value.close()
-        print('off')
 
     def read(self):
         val = self._f_value.read()
@@ -77,27 +71,63 @@ class LightWare:
         self._f_value.close()
         return int(val)
 
+
 switches_state = {
     "switches": {
-        "1": {
-            "id": 1,
-            "name": "Основное освещение",
+        "5": {
+            "id": 5,
+            "name": "Channel 5",
             "state": False,
             "color": "red",
-            "active": False
+            "active": True
         },
-        "2": {
-            "id": 2,
-            "name": "Диван",
+        "6": {
+            "id": 6,
+            "name": "Channel 6",
             "state": False,
             "color": "purple",
             "active": True
         },
-        "3": {
-            "id": 3,
-            "name": "Вход",
+        "13": {
+            "id": 13,
+            "name": "Channel 13",
+            "state": False,
+            "color": "green",
+            "active": True
+        },
+        "19": {
+            "id": 19,
+            "name": "Channel 19",
             "state": False,
             "color": "yellow",
+            "active": True
+        },
+        "26": {
+            "id": 26,
+            "name": "Channel 26",
+            "state": False,
+            "color": "orange",
+            "active": True
+        },
+        "12": {
+            "id": 12,
+            "name": "Channel 12",
+            "state": False,
+            "color": "violet",
+            "active": True
+        },
+        "16": {
+            "id": 16,
+            "name": "Channel 16",
+            "state": False,
+            "color": "pink",
+            "active": True
+        },
+        "20": {
+            "id": 20,
+            "name": "Channel 20",
+            "state": False,
+            "color": "brown",
             "active": True
         }
     },
@@ -112,19 +142,19 @@ dimmer_state = {
     "dimmer": {
         "1": {
             "id": 1,
-            "name": "Вход",
+            "name": "Door",
             "value": 0,
             "active": True
         },
         "2": {
             "id": 2,
-            "name": "Диван",
+            "name": "Sofa",
             "value": 0,
             "active": True
         },
         "3": {
             "id": 3,
-            "name": "Комп",
+            "name": "Work zone",
             "value": 0,
             "active": True
         }
@@ -144,7 +174,7 @@ def index():
 
 @application.route("/api")
 def api():
-    return jsonify({"api": {"version": "0.0.1"}})
+    return jsonify({"api": {"version": "1.0.0"}})
 
 
 @application.route("/api/channel/status", methods=["GET"])
@@ -153,6 +183,7 @@ def get_channel_status():
 
 
 @application.route("/api/channel/set/state", methods=["POST"])
+@cross_origin()
 def set_state():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
@@ -162,8 +193,13 @@ def set_state():
     _state = _params.get("state", None)
 
     ret = {"channel": _channel, "state": _state}
-    print(ret)
     switches_state['switches']['{}'.format(_channel)]['state'] = _state
+
+    if _state:
+        LightWare(_channel).on()
+    else:
+        LightWare(_channel).off()
+
     return jsonify(ret), 200
 
 
@@ -173,6 +209,7 @@ def get_dimmer_status():
 
 
 @application.route("/api/dimmer/set/state", methods=["POST"])
+@cross_origin()
 def set_dimmer_state():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
@@ -187,7 +224,9 @@ def set_dimmer_state():
 
     ret = {"dimmer": _dimmer, "value": _value}
     dimmer_state['dimmer']['{}'.format(_dimmer)]['value'] = _value
-    subprocess.call(["dimmer.py", str(_dimmer), str(_value)])
+
+    __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+    subprocess.call([os.path.join(__location__, 'dimmer.py'), str(_dimmer), str(_value)])
     return jsonify(ret), 200
 
 
