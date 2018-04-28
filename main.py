@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import os
 import subprocess
+import logging
+logging.basicConfig(filename='/run/lightware.log', level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%d.%m.%Y %H:%M:%S ')
 from flask_cors import CORS, cross_origin
 from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, jsonify, request, make_response, render_template
@@ -210,7 +212,6 @@ def get_dimmer_status():
 
 
 @application.route("/api/dimmer/set/state", methods=["POST"])
-@cross_origin()
 def set_dimmer_state():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
@@ -226,14 +227,22 @@ def set_dimmer_state():
     ret = {"dimmer": _dimmer, "value": _value}
     dimmer_state['dimmer']['{}'.format(_dimmer)]['value'] = _value
 
-    __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-    subprocess.call([os.path.join(__location__, 'dimmer.py'), str(_dimmer), str(_value)])
-    return jsonify(ret), 200
+    try:
+        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+        subprocess.call([os.path.join(__location__, 'dimmer.py'), str(_dimmer), str(_value)])
+        return jsonify(ret), 200
+    except Exception as e:
+        logging.warning('Error: ' + str(e))
 
 
 @application.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({"msg": "Resource not found"}), 404)
+
+
+@application.errorhandler(405)
+def handle_bad_request(error):
+    return make_response(jsonify({"msg": "Method not allowed"}), 405)
 
 
 if __name__ == "__main__":
