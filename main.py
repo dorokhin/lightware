@@ -234,16 +234,7 @@ def set_dimmer_state():
         return jsonify(ret), 200
     except Exception as e:
         logging.WARNING('Error: ' + str(e))
-
-
-@application.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({"msg": "Resource not found"}), 404)
-
-
-@application.errorhandler(405)
-def handle_bad_request(error):
-    return make_response(jsonify({"msg": "Method not allowed"}), 405)
+        return make_response(jsonify({"msg": "Server error"}), 500)
 
 
 if __name__ == "__main__":
