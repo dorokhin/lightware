@@ -226,7 +226,7 @@ def set_dimmer_state():
 
     ret = {"dimmer": _dimmer, "value": _value}
     dimmer_state['dimmer']['{}'.format(_dimmer)]['value'] = _value
-
+    _value = 100 - _value
     try:
         subprocess.call(['dimmer.py', str(_dimmer), str(_value)], cwd='/home/projects/lightware')
         logging.info('set dimmer #{0} value to {1} %'.format(_dimmer, _value))
