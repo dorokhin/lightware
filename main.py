@@ -79,28 +79,28 @@ switches_state = {
     "switches": {
         "5": {
             "id": 5,
-            "name": "Channel 5",
+            "name": "Main light",
             "state": False,
-            "color": "red",
+            "color": "purple",
             "active": True
         },
         "6": {
             "id": 6,
             "name": "Channel 6",
             "state": False,
-            "color": "purple",
-            "active": True
+            "color": "red",
+            "active": False
         },
         "13": {
             "id": 13,
-            "name": "Channel 13",
+            "name": "Main light",
             "state": False,
             "color": "green",
             "active": True
         },
         "19": {
             "id": 19,
-            "name": "Channel 19",
+            "name": "LED Strip",
             "state": False,
             "color": "yellow",
             "active": True
@@ -110,28 +110,28 @@ switches_state = {
             "name": "Channel 26",
             "state": False,
             "color": "orange",
-            "active": True
+            "active": False
         },
         "12": {
             "id": 12,
             "name": "Channel 12",
             "state": False,
             "color": "violet",
-            "active": True
+            "active": False
         },
         "16": {
             "id": 16,
             "name": "Channel 16",
             "state": False,
             "color": "pink",
-            "active": True
+            "active": False
         },
         "20": {
             "id": 20,
             "name": "Channel 20",
             "state": False,
             "color": "brown",
-            "active": True
+            "active": False
         }
     },
     "api": {
