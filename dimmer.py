@@ -43,7 +43,7 @@ class KridaDimmer:
     :param channel_number: number of channel (decimal range from 1 to 4)
     :param level: dimming level, decimal range from 0 (Full On) to 100 (Full Off)
     """
-    def __init__(self, address=0x27, channel_number=1, level=75):
+    def __init__(self, address=0x27, channel_number=1, level=50):
         """
         Send one byte of control data to the i2c dimmer
         :param address: hex value of i2c address (replace with your dimmer address)
