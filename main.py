@@ -228,12 +228,8 @@ def set_dimmer_state():
     dimmer_state['dimmer']['{}'.format(_dimmer)]['value'] = _value
 
     try:
-        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-        subprocess.call([os.path.join(__location__, 'dimmer.py'), str(_dimmer), str(_value)])
-        logging.info('set dimmer #{0} value to {1} %, location is: '
-                     .format(_dimmer, _value,
-                             os.path.realpath(os.path.join(os.getcwd(),
-                                                           os.path.dirname(__file__)))))
+        subprocess.call(['dimmer.py', str(_dimmer), str(_value)], cwd='/home/projects/lightware')
+        logging.info('set dimmer #{0} value to {1} %'.format(_dimmer, _value))
         return jsonify(ret), 200
     except Exception as e:
         logging.warning('Error: ' + str(e))
