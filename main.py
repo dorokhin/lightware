@@ -219,7 +219,7 @@ def set_dimmer_state():
     _params = request.get_json()
     _dimmer = _params.get("dimmer", None)
     _value = _params.get("value", None)
-    if not _value:
+    if _value is None:
         return jsonify({"msg": "Missing value"}), 400
     if _value < 0 or _value > 100:
         return jsonify({"msg": "Out of range"}), 400
