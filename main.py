@@ -234,7 +234,6 @@ def set_dimmer_state():
         return jsonify(ret), 200
     except Exception as e:
         logging.WARNING('Error: ' + str(e))
-        return make_response(jsonify({"msg": "Server error"}), 500)
 
 
 if __name__ == "__main__":
