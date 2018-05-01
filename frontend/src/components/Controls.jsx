@@ -14,7 +14,7 @@ class Controls extends Component {
       channels: { "switches": {} },
       dimmableChannels: { "dimmer": {} }
     };
-    this.ApiAddress = "http://192.168.1.110:5000/api/";
+    this.ApiAddress = "https://lightware.dorokhin.moscow/api/";
   }
 
 

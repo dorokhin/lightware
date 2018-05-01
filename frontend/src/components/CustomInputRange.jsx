@@ -9,7 +9,7 @@ class CustomInputRange extends Component {
       value: 0,
     };
 
-    this.ApiAddress = "http://192.168.1.110:5000/api/";
+    this.ApiAddress = "https://lightware.dorokhin.moscow/api/";
   }
 
   componentDidMount() {
