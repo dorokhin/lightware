@@ -8,7 +8,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, jsonify, request, make_response, render_template
 
 application = Flask(__name__)
-application.debug = True
+application.debug = False
 cors = CORS(application, resources={r"/api/*": {"origins": "*"}})
 application.config['SECRET_KEY'] = 'j1h9syenwksu2nHanzPakq63sdfhshdfHjH45dfGFDjd'
 toolbar = DebugToolbarExtension(application)
