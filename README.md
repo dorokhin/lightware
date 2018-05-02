@@ -1,4 +1,4 @@
-# LightWare DIY#
+# LightWare DIY #
 
 API and SPA for controlling LED lamps and dimmable LED lamps (simple home automation)
 
