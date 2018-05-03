@@ -9,10 +9,11 @@ class Controls extends Component {
   constructor() {
     super();
     this.state = {
-      status: true,
+      status: false,
       checked: false,
       channels: { "switches": {} },
-      dimmableChannels: { "dimmer": {} }
+      dimmableChannels: { "dimmer": {} },
+
     };
     this.ApiAddress = "https://lightware.dorokhin.moscow/api/";
   }
@@ -24,7 +25,8 @@ class Controls extends Component {
       const channels = res.data;
       this.setState({
         channels,
-        loading: false
+        loading: false,
+        status: true
       })
     })
     .catch(function (error) {
@@ -36,7 +38,8 @@ class Controls extends Component {
     .then(res => {
       const dimmableChannels = res.data;
       this.setState({
-        dimmableChannels
+        dimmableChannels,
+        status: true
       });
     })
     .catch(function (error) {
@@ -55,7 +58,13 @@ class Controls extends Component {
         <div className="ui segment">
           <p>Channel control switch</p>
 
+            {!this.state.status &&
+            <p><Label color="red" horizontal><i class="exclamation triangle icon"></i>Offline</Label></p>
+
+            }
+
           <div className="ui form">
+
           {
             Object.keys(this.state.channels.switches).map(
               item =>
