@@ -9,9 +9,9 @@ idna==2.6
 itsdangerous==0.24
 Jinja2==2.9.6
 MarkupSafe==1.0
-requests==2.18.4
+requests>=2.20.0
 six==1.11.0
 SQLAlchemy==1.1.14
-urllib3==1.22
+urllib3>=1.23
 uWSGI==2.0.15
 Werkzeug==0.12.2
