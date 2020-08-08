@@ -206,7 +206,7 @@ def set_state():
     return jsonify(ret), 200
 
 
-@application.route("/api/channel/<int:channel>/<int:state>}", methods=["POST"])
+@application.route("/api/channel/<int:channel>/<int:state>}", methods=["POST", "GET"])
 @cross_origin()
 def set_channel_state(channel, state):
     if state == 1:
