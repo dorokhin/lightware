@@ -2,7 +2,7 @@
 import os
 import subprocess
 import logging
-logging.basicConfig(filename='/run/lightware.log', level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%d.%m.%Y %H:%M:%S ')
+logging.basicConfig(filename='run/lightware.log', level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%d.%m.%Y %H:%M:%S ')
 from flask_cors import CORS, cross_origin
 from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, jsonify, request, make_response, render_template
@@ -206,6 +206,17 @@ def set_state():
     return jsonify(ret), 200
 
 
+@application.route("/api/channel/<int:channel>/<int:state>}", methods=["POST"])
+@cross_origin()
+def set_state(channel, state):
+    if state == 1:
+        LightWare(channel).on()
+    else:
+        LightWare(channel).off()
+
+    return jsonify('ok'), 200
+
+
 @application.route("/api/dimmer/status", methods=["GET"])
 def get_dimmer_status():
     return jsonify(dimmer_state)
@@ -247,4 +258,4 @@ def handle_bad_request(error):
 
 
 if __name__ == "__main__":
-    application.run(host='0.0.0.0')
+    application.run(host='0.0.0.0', port=5544, debug=True)
