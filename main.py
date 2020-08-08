@@ -208,7 +208,7 @@ def set_state():
 
 @application.route("/api/channel/<int:channel>/<int:state>}", methods=["POST"])
 @cross_origin()
-def set_state(channel, state):
+def set_channel_state(channel, state):
     if state == 1:
         LightWare(channel).on()
     else:
